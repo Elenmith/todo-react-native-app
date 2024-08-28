@@ -8,6 +8,7 @@ export default function App() {
   const [taskItems, setTaskItems] = useState([]);
 
   const handleAddTask = () => {
+    Keyboard.dismiss();
     setTaskItems([...taskItems, task])
     setTask(null);
   }
@@ -22,8 +23,8 @@ export default function App() {
       <View style={styles.items}>
       {/* This is where the tasks will go! */}
       {
-        taskItems.map((item) => {
-          return <Task text={'item'} />
+        taskItems.map((item, index) => {
+          return <Task key={index} text={item} />
         })
       }
       <Task text={'Task 1'}/>
