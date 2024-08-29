@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState} from 'react';
-import { KeyboardAvoidingView, StyleSheet, Text, TextInput, View, Platform, TouchableOpacity} from 'react-native';
+import { KeyboardAvoidingView, StyleSheet, Text, TextInput, View, Platform, Keyboard, TouchableOpacity, ScrollView} from 'react-native';
 import Task from './components/Task';
 
 export default function App() {
@@ -12,27 +12,41 @@ export default function App() {
     setTaskItems([...taskItems, task])
     setTask(null);
   }
+
+  const completeTask = (index) => {
+    let itemsCopy = [...taskItems];
+    itemsCopy.splice(index, 1);
+    setTaskItems(itemsCopy)
+  }
   
   return (
     <View style={styles.container}>
+      {/* Added this scroll view to enable scrolling when list gets longer than the page */}
+      <ScrollView
+        contentContainerStyle={{
+          flexGrow: 1
+        }}
+        keyboardShouldPersistTaps='handled'
+      >
 
-      {/*Today's Tasks */}
-    <View style={styles.tasksWrapper}>
-      <Text style={styles.sectionTitle}>Today's tasks</Text>
-
-      <View style={styles.items}>
-      {/* This is where the tasks will go! */}
-      {
-        taskItems.map((item, index) => {
-          return <Task key={index} text={item} />
-        })
-      }
-      <Task text={'Task 1'}/>
-      <Task text={'Task 3'} />
-      
+      {/* Today's Tasks */}
+      <View style={styles.tasksWrapper}>
+        <Text style={styles.sectionTitle}>Today's tasks</Text>
+        <View style={styles.items}>
+          {/* This is where the tasks will go! */}
+          {
+            taskItems.map((item, index) => {
+              return (
+                <TouchableOpacity key={index}  onPress={() => completeTask(index)}>
+                  <Task text={item} /> 
+                </TouchableOpacity>
+              )
+            })
+          }
+        </View>
       </View>
-
-    </View>
+        
+      </ScrollView>
 
     {/* Write a task */}
     <KeyboardAvoidingView
